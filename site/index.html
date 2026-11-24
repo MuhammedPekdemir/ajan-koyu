@@ -1,0 +1,184 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Ajan Köyü</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap">
+<style>
+/* Düzen: solda alt ajan odacıkları, ortada üst ajanın kalesi, tıklayınca sağdan sohbet açılır. */
+:root{--bg:#141019;--ground:#1d1724;--panel:#251d2e;--fg:#f1e6d3;--muted:#a898b5;--line:#4a3c58;--accent:#f0a030;--accent-fg:#1b1208;--roof:#7a3b2e;--roof-top:#b5542f;--wall:#3a2c45;--user:#3a2a17;--ok:#7fd36b;
+--font:"VT323",ui-monospace,Consolas,monospace;--pix:"Press Start 2P",ui-monospace,monospace;color-scheme:dark}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:var(--font);font-size:20px;line-height:1.25;padding:20px 16px}
+button{font:inherit;color:inherit;cursor:pointer}
+button:focus-visible,textarea:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+h1{font-family:var(--pix);font-size:1rem;color:var(--accent);margin:0 0 6px;text-align:center}
+.sub{color:var(--muted);margin:0 0 22px;text-align:center}
+.village{max-width:1100px;margin:0 auto;display:grid;grid-template-columns:minmax(0,260px) minmax(0,1fr);align-items:center;min-height:70vh;
+  background:radial-gradient(ellipse at 60% 55%,#2a2034 0%,transparent 60%),var(--ground);border:3px solid var(--line);box-shadow:6px 6px 0 #000;padding:24px 0}
+.left{display:flex;flex-direction:column;gap:22px;padding-left:20px;min-width:0}
+.center{display:flex;justify-content:center;align-items:center;padding:20px;min-width:0}
+.hut{position:relative;display:block;width:100%;text-align:left;background:none;border:0;padding:0}
+.hut .roof{height:28px;background:var(--roof);clip-path:polygon(50% 0,100% 100%,0 100%);margin:0 6px}
+.hut .body{background:var(--wall);border:3px solid #000;box-shadow:4px 4px 0 #000;padding:8px 10px;display:grid;grid-template-columns:40px minmax(0,1fr);column-gap:8px;align-items:center}
+.hut .ic{font-size:30px;line-height:1;text-align:center;grid-row:span 2}
+.hut .t{font-family:var(--pix);font-size:.55rem;overflow-wrap:anywhere}
+.hut .st{font-size:.95rem;color:var(--muted)}
+.dot{display:inline-block;width:9px;height:9px;margin-right:6px;background:var(--ok);vertical-align:middle}
+.busy .dot{background:var(--accent);animation:blink 1s steps(2) infinite}
+.hut:hover .body,.hut[aria-pressed="true"] .body{border-color:var(--accent)}
+.hut[aria-pressed="true"] .roof{background:var(--roof-top)}
+.hut::after{content:"";position:absolute;left:100%;top:62%;width:60px;border-top:3px dashed var(--line)}
+@keyframes blink{50%{opacity:.2}}
+@media (prefers-reduced-motion:reduce){.busy .dot{animation:none}}
+.hall{position:relative;background:none;border:0;padding:0;width:min(360px,100%);text-align:center}
+.hall .towers{display:flex;justify-content:space-between;margin:0 10px}
+.hall .tw{width:44px;height:54px;background:var(--wall);border:3px solid #000;border-bottom:0;clip-path:polygon(0 18%,20% 18%,20% 0,40% 0,40% 18%,60% 18%,60% 0,80% 0,80% 18%,100% 18%,100% 100%,0 100%)}
+.hall .roof{height:54px;background:var(--roof);clip-path:polygon(50% 0,100% 100%,0 100%);margin:-40px 40px 0}
+.hall .body{background:var(--wall);border:3px solid #000;box-shadow:6px 6px 0 #000;padding:16px 14px}
+.hall .ic{font-size:56px;line-height:1}
+.hall .t{font-family:var(--pix);font-size:.8rem;color:var(--accent);margin:10px 0 6px}
+.chips{display:flex;flex-wrap:wrap;justify-content:center;gap:6px;margin:6px 0}
+.chip{font-size:.9rem;border:2px solid var(--line);padding:0 6px;color:var(--muted);background:var(--bg)}
+.cta{display:inline-block;margin-top:10px;font-family:var(--pix);font-size:.55rem;padding:8px 12px;background:var(--accent);color:var(--accent-fg);box-shadow:3px 3px 0 #000}
+.hall[aria-pressed="true"] .body,.hall:hover .body{border-color:var(--accent)}
+.hall .bub{position:absolute;top:-14px;right:-6px;background:var(--fg);color:#1b1208;padding:2px 8px;font-size:.95rem;border:2px solid #000}
+.drawer{position:fixed;top:0;right:0;bottom:0;width:min(440px,100%);background:var(--panel);border-left:3px solid #000;box-shadow:-6px 0 0 #000;display:flex;flex-direction:column;padding:14px;transform:translateX(105%);transition:transform .2s;z-index:20}
+.drawer.open{transform:none}
+@media (prefers-reduced-motion:reduce){.drawer{transition:none}}
+.dh{display:flex;align-items:center;gap:10px}
+.dh .ic{font-size:30px}
+.dh .name{font-family:var(--pix);font-size:.65rem;flex:1;min-width:0;overflow-wrap:anywhere}
+.sbtn{background:var(--bg);border:2px solid var(--line);padding:0 8px;font-size:1rem}
+.meta{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0 4px}
+.task{color:var(--muted);margin:4px 0}
+.log{flex:1;overflow-y:auto;display:flex;flex-direction:column;gap:8px;padding:8px 2px;border-top:2px solid var(--line);margin-top:6px}
+.msg{padding:6px 10px;max-width:94%;white-space:pre-wrap;overflow-wrap:anywhere;border:2px solid var(--line)}
+.msg.u{align-self:flex-end;background:var(--user)}
+.msg.a{align-self:flex-start;background:var(--bg)}
+.msg.s{align-self:center;border:0;color:var(--muted);font-size:1rem;text-align:center}
+.msg.e{align-self:stretch;border-color:#c0504d;color:#f0a0a0}
+.msg a{color:var(--accent)}
+form{display:flex;gap:8px;border-top:2px solid var(--line);padding-top:10px}
+textarea{flex:1;font:inherit;resize:none;border:2px solid var(--line);padding:6px;background:var(--bg);color:var(--fg);min-width:0}
+.send{font-family:var(--pix);font-size:.55rem;border:2px solid #000;background:var(--accent);color:var(--accent-fg);padding:6px 10px;box-shadow:3px 3px 0 #000}
+.send:disabled,textarea:disabled{opacity:.45;cursor:not-allowed}
+@media (max-width:720px){
+  .village{grid-template-columns:minmax(0,1fr);padding:16px}
+  .left{padding:0;order:2;display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:16px}
+  .center{order:1;padding:0 0 20px}
+  .hut::after{display:none}
+}
+</style>
+</head>
+<body>
+<h1>Ajan Köyü</h1>
+<p class="sub">Bir odaya tıkla, sağda o ajanla konuş. Her ajan bu bilgisayarda Claude Code ile çalışır.</p>
+
+<main class="village">
+  <nav class="left" id="huts" aria-label="Alt ajan odaları"></nav>
+  <div class="center">
+    <button class="hall" id="hall" type="button" aria-pressed="false">
+      <span class="bub" id="hallBub" hidden>çalışıyor...</span>
+      <div class="towers"><div class="tw"></div><div class="tw"></div></div>
+      <div class="roof"></div>
+      <div class="body">
+        <div class="ic">🏰</div>
+        <div class="t">Üst ajan</div>
+        <div class="chips"><span class="chip">Opus 5.5</span><span class="chip">efor: orta</span><span class="chip">alt ajanları çağırır</span></div>
+        <div class="task">İşleri alt ajanlara dağıtır, sonuçları birleştirir.</div>
+        <span class="cta">Konuş</span>
+      </div>
+    </button>
+  </div>
+</main>
+
+<aside class="drawer" id="drawer" aria-label="Sohbet" aria-hidden="true">
+  <div class="dh"><span class="ic" id="dIc"></span><span class="name" id="dName"></span>
+    <button class="sbtn" id="reset" type="button" title="Bu odanın sohbetini sıfırla">yeni</button>
+    <button class="sbtn" id="close" type="button" aria-label="Kapat">×</button></div>
+  <div class="meta" id="dMeta"></div>
+  <p class="task" id="dTask"></p>
+  <div class="log" id="log" aria-live="polite"></div>
+  <form id="form">
+    <textarea id="box" rows="3" placeholder="Mesajını yaz (Enter gönderir, Shift+Enter yeni satır)"></textarea>
+    <button class="send" id="send" type="submit">Gönder</button>
+  </form>
+</aside>
+
+<script>
+(function(){
+  var $=function(id){return document.getElementById(id)};
+  var rooms={
+    top:{icon:"🏰",title:"Üst ajan",chips:["Opus 5.5","efor: orta"],task:"İşleri alt ajanlara dağıtır. Mesela \"maillerimi ve AI haberlerini özetle\".",hello:"Merhaba. Ne yapalım?"},
+    mail:{icon:"📮",title:"mail-ozetci",chips:["Sonnet","efor: orta","sadece okur"],task:"Gelen maillerin özetini çıkarır. Göndermez, silmez.",hello:"Mesela: bugünkü maillerimi özetle."},
+    haber:{icon:"📰",title:"ai-haber",chips:["Sonnet","efor: orta","web araması"],task:"Son 7 günün AI haberlerini toplar, gösterdiklerini tekrar etmez.",hello:"Mesela: AI haberlerini getir."},
+    cv:{icon:"📄",title:"cv-uyum",chips:["Sonnet","efor: extra yüksek","CV + transkript"],task:"İlanı analiz eder, CV'ni ilana göre uyarlar.",hello:"İlan metnini yapıştır. İstersen hangi CV'nin (pazarlama / ai-data) kullanılacağını da yaz."}
+  };
+  var left=["mail","haber","cv"];
+  Object.keys(rooms).forEach(function(k){rooms[k].log=[{c:"s",t:rooms[k].hello}];rooms[k].busy=false;});
+  var current=null;
+
+  function el(tag,cls,text){var e=document.createElement(tag);if(cls)e.className=cls;if(text!==undefined)e.textContent=text;return e;}
+  // Cevaptaki cv/ciktilar/....html yollarını tıklanabilir yap.
+  function msgNode(x){
+    var d=el("div","msg "+x.c);
+    var re=/(?:[A-Za-z]:\\[^\s]*?\\)?cv[\\\/]ciktilar[\\\/]([A-Za-z0-9._-]+\.html)/g, last=0, m, t=x.t;
+    while((m=re.exec(t))){d.appendChild(document.createTextNode(t.slice(last,m.index)));var a=el("a",null,m[0]);a.href="/cv/ciktilar/"+m[1];a.target="_blank";a.rel="noopener";d.appendChild(a);last=re.lastIndex;}
+    d.appendChild(document.createTextNode(t.slice(last)));return d;
+  }
+  function renderHuts(){
+    var nav=$("huts");nav.textContent="";
+    left.forEach(function(k){
+      var r=rooms[k];
+      var b=el("button","hut"+(r.busy?" busy":""));b.type="button";b.setAttribute("aria-pressed",k===current?"true":"false");
+      b.appendChild(el("div","roof"));
+      var body=el("div","body");body.appendChild(el("div","ic",r.icon));body.appendChild(el("div","t",r.title));
+      var st=el("div","st");st.appendChild(el("span","dot"));st.appendChild(document.createTextNode(r.busy?"çalışıyor...":"hazır"));
+      body.appendChild(st);b.appendChild(body);
+      b.addEventListener("click",function(){open(k);});nav.appendChild(b);
+    });
+    $("hall").setAttribute("aria-pressed",current==="top"?"true":"false");$("hallBub").hidden=!rooms.top.busy;
+  }
+  function renderDrawer(){
+    if(!current)return;var r=rooms[current];
+    $("dIc").textContent=r.icon;$("dName").textContent=r.title;
+    var m=$("dMeta");m.textContent="";r.chips.forEach(function(c){m.appendChild(el("span","chip",c));});
+    $("dTask").textContent=r.task;
+    var lg=$("log");lg.textContent="";r.log.forEach(function(x){lg.appendChild(msgNode(x));});lg.scrollTop=lg.scrollHeight;
+    $("send").disabled=r.busy;$("reset").disabled=r.busy;
+  }
+  function open(k){current=k;$("drawer").classList.add("open");$("drawer").setAttribute("aria-hidden","false");renderHuts();renderDrawer();$("box").focus();}
+  function closeDrawer(){current=null;$("drawer").classList.remove("open");$("drawer").setAttribute("aria-hidden","true");renderHuts();}
+  $("hall").addEventListener("click",function(){open("top");});
+  $("close").addEventListener("click",closeDrawer);
+  document.addEventListener("keydown",function(e){if(e.key==="Escape")closeDrawer();});
+
+  function refresh(k){renderHuts();if(k===current)renderDrawer();}
+  async function post(url,body){var r=await fetch(url,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(body)});return r.json();}
+
+  $("reset").addEventListener("click",async function(){
+    var k=current;if(!k||rooms[k].busy)return;
+    try{await post("/api/sifirla",{oda:k});}catch(e){}
+    rooms[k].log=[{c:"s",t:"Yeni sohbet başladı."}];refresh(k);
+  });
+
+  $("form").addEventListener("submit",async function(e){
+    e.preventDefault();var k=current;if(!k)return;var r=rooms[k],t=$("box").value.trim();
+    if(!t||r.busy)return;$("box").value="";
+    r.log.push({c:"u",t:t});var wait={c:"s",t:"Çalışıyor... (birkaç dakika sürebilir)"};r.log.push(wait);r.busy=true;refresh(k);
+    try{
+      var res=await post("/api/sohbet",{oda:k,mesaj:t});
+      r.log.splice(r.log.indexOf(wait),1);
+      r.log.push(res.hata?{c:"e",t:"Hata: "+res.hata}:{c:"a",t:res.metin||"(boş cevap)"});
+    }catch(err){
+      r.log.splice(r.log.indexOf(wait),1);r.log.push({c:"e",t:"Sunucuya ulaşılamadı. Terminalde sunucu açık mı?"});
+    }finally{r.busy=false;refresh(k);}
+  });
+  $("box").addEventListener("keydown",function(e){if(e.key==="Enter"&&!e.shiftKey){e.preventDefault();$("form").requestSubmit();}});
+  renderHuts();
+})();
+</script>
+</body>
+</html>

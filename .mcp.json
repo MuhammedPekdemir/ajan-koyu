@@ -1,0 +1,11 @@
+{
+  "mcpServers": {
+    "mail": {
+      "command": "python",
+      "args": ["araclar/mail_mcp.py"],
+      "env": {
+        "MAIL_CLIENT_ID": "BURAYA-AZURE-CLIENT-ID"
+      }
+    }
+  }
+}

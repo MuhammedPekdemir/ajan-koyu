@@ -1,0 +1,12 @@
+{
+  "genislik": 128,
+  "yukseklik": 128,
+  "arkaplan": "#e8f4fc",
+  "sekiller": [
+    {"tip": "dikdortgen", "x": 0, "y": 108, "g": 128, "y2": 20, "renk": "#a8d98a"},
+    {"tip": "dikdortgen", "x": 55, "y": 60, "g": 18, "y2": 58, "renk": "#8b5a2b"},
+    {"tip": "daire", "x": 64, "y": 45, "r": 32, "renk": "#3f9f3f"},
+    {"tip": "daire", "x": 40, "y": 62, "r": 22, "renk": "#4caf50"},
+    {"tip": "daire", "x": 88, "y": 62, "r": 22, "renk": "#4caf50"}
+  ]
+}

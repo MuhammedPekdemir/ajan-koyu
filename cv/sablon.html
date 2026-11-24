@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>{{AD}} - CV</title>
+<!-- cv-uyum şablonu. Sadece {{...}} alanlarını ve madde listelerini değiştir. CSS'e dokunma.
+     Tarayıcıda aç, Ctrl+P > Hedef: PDF olarak kaydet > Kenar boşlukları: Yok. -->
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,400;0,700;1,400&display=swap">
+<style>
+  @page { size: A4; margin: 0; }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: #e9e9e9; font-family: Lato, "Segoe UI", Arial, sans-serif; color: #222; font-size: 10.5pt; line-height: 1.35; }
+  .page { width: 210mm; min-height: 297mm; margin: 10mm auto; background: #fff; padding: 14mm 17mm; }
+  h1 { font-size: 24pt; margin: 0 0 4px; color: #3a3a3a; border-bottom: 1px solid #999; padding-bottom: 4px; }
+  .contact { margin: 6px 0 0; }
+  .contact b { font-weight: 700; }
+  .contact a { color: #1a4fa0; }
+  h2 { font-size: 11pt; letter-spacing: .08em; color: #1f3a68; border-bottom: 1.5px solid #1f3a68; margin: 14px 0 6px; padding-bottom: 2px; }
+  p { margin: 0; text-align: justify; }
+  .row { display: flex; justify-content: space-between; gap: 12px; }
+  .date { color: #555; font-size: 9.5pt; white-space: nowrap; }
+  .sub { font-style: italic; color: #555; }
+  .tech { color: #555; font-weight: 400; font-size: 9.5pt; }
+  .link { color: #555; font-size: 9pt; }
+  ul { margin: 3px 0 0; padding-left: 18px; }
+  li { margin: 1px 0; }
+  .cert { display: flex; justify-content: space-between; margin: 2px 0; }
+  .cert span.by { color: #555; }
+  @media print { body { background: #fff; } .page { margin: 0; } }
+</style>
+</head>
+<body>
+<div class="page">
+  <h1>{{AD}}</h1>
+  <div class="contact"><b>Phone:</b> {{TELEFON}} &nbsp;|&nbsp; <b>Email:</b> <a href="mailto:{{EMAIL}}">{{EMAIL}}</a> &nbsp;|&nbsp; <b>Address:</b> {{ADRES}}</div>
+  <div class="contact"><b>LinkedIn:</b> <a href="https://{{LINKEDIN}}">{{LINKEDIN}}</a> &nbsp;|&nbsp; <b>GitHub:</b> <a href="https://{{GITHUB}}">{{GITHUB}}</a></div>
+
+  <h2>PROFILE</h2>
+  <p>{{PROFIL}}</p>
+
+  <h2>EDUCATION</h2>
+  <div class="row"><b>{{OKUL}}</b><span class="date">{{OKUL_TARIH}}</span></div>
+  <div class="sub">{{BOLUM_SATIRI}}</div>
+  <ul><li><b>Relevant coursework:</b> {{DERSLER}}</li></ul>
+
+  <h2>PROJECTS</h2>
+  <div class="row"><span><b>{{PROJE_ADI}}</b> <span class="tech">{{PROJE_TEKNOLOJI}}</span></span><span class="date">{{PROJE_YIL}}</span></div>
+  <div class="link">{{PROJE_LINK}}</div>
+  <ul>
+    <li>{{PROJE_MADDE_1}}</li>
+    <li>{{PROJE_MADDE_2}}</li>
+    <li>{{PROJE_MADDE_3_OPSIYONEL}}</li>
+  </ul>
+
+  <h2>SKILLS</h2>
+  <ul>
+    <li><b>{{BECERI_GRUP_1_ADI}}:</b> {{BECERI_GRUP_1}}</li>
+    <li><b>{{BECERI_GRUP_2_ADI}}:</b> {{BECERI_GRUP_2}}</li>
+  </ul>
+
+  <h2>CERTIFICATIONS</h2>
+  <!-- Temel CV'deki her sertifika için bir satır. Hiçbiri silinmez, sadece sırası ilana göre değişir. -->
+  <div class="cert"><span><b>{{SERTIFIKA_ADI}}</b> <span class="by">– {{VEREN}}</span></span><span class="date">{{TARIH}}</span></div>
+
+  <h2>LANGUAGES</h2>
+  <div>{{DILLER}}</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,7 @@
+{"genislik":128,"yukseklik":128,"arkaplan":"#87ceeb","sekiller":[
+{"tip":"dikdortgen","x":0,"y":100,"g":128,"y2":28,"renk":"#4caf50"},
+{"tip":"dikdortgen","x":24,"y":58,"g":80,"y2":50,"renk":"#f5deb3"},
+{"tip":"ucgen","noktalar":[[64,16],[116,58],[12,58]],"renk":"#d32f2f"},
+{"tip":"dikdortgen","x":54,"y":76,"g":20,"y2":32,"renk":"#8d5524"},
+{"tip":"dikdortgen","x":32,"y":70,"g":16,"y2":16,"renk":"#4fc3f7"},
+{"tip":"daire","x":108,"y":20,"r":10,"renk":"#ffeb3b"}]}

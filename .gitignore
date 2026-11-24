@@ -1,0 +1,24 @@
+# Kişisel CV verileri (sadece yerelde)
+cv/temel/pazarlama.md
+cv/temel/ai-data.md
+cv/temel/dersler.md
+cv/ciktilar/
+
+# Token ve anahtarlar
+.token.json
+*.token.json
+.mail_token.json
+client_id.txt
+.env
+
+# Çalışma durumu
+haber/gosterilenler.md
+.claude/settings.local.json
+
+# Python
+__pycache__/
+*.pyc
+
+# Depoya girmeyecek ajanlar
+.claude/agents/spotify-oneri.md
+haber/okuyucu.md
