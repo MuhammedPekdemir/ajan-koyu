@@ -22,3 +22,11 @@ __pycache__/
 # Depoya girmeyecek ajanlar
 .claude/agents/spotify-oneri.md
 haber/okuyucu.md
+
+# Eski deneme dosyaları (sadece yerelde)
+ornek.py
+RAPOR.html
+tasarimlar/
+araclar/
+.mcp.json
+ajan-paneli.html
